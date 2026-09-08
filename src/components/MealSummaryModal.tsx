@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { X, Copy, Check, Share2, Flame, Award, Utensils, Zap, Target } from 'lucide-react';
-import { TableOrders, MacroTotals, UserSettings } from '../types';
+import { X, Copy, Check, Share2, Flame, Award, Utensils, Zap, Target, Save, LogIn, CheckCircle2 } from 'lucide-react';
+import { TableOrders, MacroTotals, UserSettings, AuthUser } from '../types';
 import { MK_MENU_ITEMS } from '../data/mkMenu';
 
 interface MealSummaryModalProps {
@@ -9,6 +9,9 @@ interface MealSummaryModalProps {
   orders: TableOrders;
   totals: MacroTotals;
   userSettings: UserSettings;
+  authUser?: AuthUser | null;
+  onSaveSession?: () => Promise<{ success: boolean; savedOnServer?: boolean }>;
+  authServerUrl?: string;
 }
 
 export const MealSummaryModal: React.FC<MealSummaryModalProps> = ({
@@ -17,8 +20,13 @@ export const MealSummaryModal: React.FC<MealSummaryModalProps> = ({
   orders,
   totals,
   userSettings,
+  authUser,
+  onSaveSession,
+  authServerUrl = 'http://localhost:4000',
 }) => {
   const [copied, setCopied] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [savedSuccess, setSavedSuccess] = useState(false);
 
   if (!isOpen) return null;
 
@@ -185,6 +193,70 @@ export const MealSummaryModal: React.FC<MealSummaryModalProps> = ({
                     </div>
                   </div>
                 ))}
+              </div>
+            )}
+          </div>
+
+          {/* User Account & Record Session Card */}
+          <div className="bg-gradient-to-br from-mk-card to-[#1a1a22] p-4 rounded-2xl border border-mk-border space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="text-xs font-bold text-white flex items-center gap-2">
+                <Save className="w-4 h-4 text-blue-400" />
+                <span>บันทึกมื้ออาหารเข้าบัญชีผู้ใช้</span>
+              </div>
+              {authUser && (
+                <div className="flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 px-2.5 py-1 rounded-xl">
+                  {authUser.avatarUrl && (
+                    <img src={authUser.avatarUrl} alt="User Avatar" className="w-4 h-4 rounded-full" />
+                  )}
+                  <span className="text-[11px] font-semibold text-blue-300">
+                    {authUser.displayName || authUser.email}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {authUser ? (
+              <div className="space-y-2">
+                {savedSuccess ? (
+                  <div className="p-3 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold flex items-center justify-center gap-2 animate-fade-in">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                    <span>บันทึกมื้ออาหารนี้เข้าโปรไฟล์เรียบร้อยแล้ว! 🎯</span>
+                  </div>
+                ) : (
+                  <button
+                    onClick={async () => {
+                      if (!onSaveSession) return;
+                      setIsSaving(true);
+                      try {
+                        const res = await onSaveSession();
+                        if (res.success) {
+                          setSavedSuccess(true);
+                        }
+                      } finally {
+                        setIsSaving(false);
+                      }
+                    }}
+                    disabled={isSaving || totals.totalTrays === 0}
+                    className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:brightness-110 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-blue-900/30 active-press disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Save className="w-4 h-4" />
+                    <span>{isSaving ? 'กำลังบันทึกข้อมูล...' : 'บันทึกมื้อนี้เข้าโปรไฟล์ Google Account'}</span>
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-2.5">
+                <p className="text-[11px] text-gray-400">
+                  เข้าสู่ระบบเพื่อบันทึกประวัติการทาน MK บุฟเฟต์นี้ พร้อมสะสมโปรตีนและแคลอรีรวมในระบบ central account
+                </p>
+                <a
+                  href={`${authServerUrl}/auth/google?redirect=${encodeURIComponent(window.location.href)}`}
+                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-600 hover:brightness-110 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-blue-900/40 active-press"
+                >
+                  <LogIn className="w-4 h-4 text-blue-200" />
+                  <span>เข้าสู่ระบบด้วย Google เพื่อบันทึกมื้อนี้</span>
+                </a>
               </div>
             )}
           </div>

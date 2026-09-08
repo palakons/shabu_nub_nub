@@ -31,3 +31,31 @@ export interface UserSettings {
   imageMode?: 'official' | 'cartoon';
 }
 
+export interface AuthUser {
+  id: string;
+  email: string;
+  displayName?: string;
+  avatarUrl?: string;
+}
+
+export interface SessionItemDetail {
+  id: string;
+  name_th: string;
+  count: number;
+  calories: number;
+}
+
+export interface SavedDiningSession {
+  id: string;
+  sessionDate: string;
+  totalTrays: number;
+  totalCalories: number;
+  proteinG: number;
+  carbsG: number;
+  fatG: number;
+  costThb: number;
+  itemsJson: SessionItemDetail[];
+  savedOnServer?: boolean;
+}
+
+

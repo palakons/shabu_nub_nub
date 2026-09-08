@@ -7,7 +7,7 @@ export interface ExtendedMenuItem extends MenuItem {
 }
 
 export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
-  // ==================== 1. BEEF & MEATS (เนื้อสัตว์) ====================
+  // ==================== 1. BEEF & MEATS (เนื้อสัตว์ / ซีฟู้ด) ====================
   {
     id: 'aus-brisket',
     name_th: 'เนื้อบริสเกตออสเตรเลีย',
@@ -18,7 +18,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 9,
     carb_g: 0,
     icon: '🥩',
-    image_url: '/items/aus-brisket.jpg',
+    image_url: '/items/aus-brisket.png',
     is_popular: true,
   },
   {
@@ -31,7 +31,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 6,
     carb_g: 2,
     icon: '🥓',
-    image_url: '/items/black-pepper-pork.jpg',
+    image_url: '/items/black-pepper-pork.png',
     is_popular: true,
   },
   {
@@ -44,7 +44,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 9,
     carb_g: 0,
     icon: '🥩',
-    image_url: '/items/kurobuta-special.jpg',
+    image_url: '/items/kurobuta-special.png',
     is_popular: true,
   },
   {
@@ -57,7 +57,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 5,
     carb_g: 1,
     icon: '🥩',
-    image_url: '/items/tender-pork.jpg',
+    image_url: '/items/tender-pork.png',
   },
   {
     id: 'black-pepper-beef',
@@ -69,7 +69,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 4,
     carb_g: 2,
     icon: '🥩',
-    image_url: '/items/black-pepper-beef.jpg',
+    image_url: '/items/black-pepper-beef.png',
   },
   {
     id: 'pork-slice',
@@ -81,7 +81,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 5,
     carb_g: 0,
     icon: '🥓',
-    image_url: '/items/pork-slice.jpg',
+    image_url: '/items/pork-slice.png',
   },
   {
     id: 'pork-belly-rolled',
@@ -93,7 +93,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 14,
     carb_g: 0,
     icon: '🥓',
-    image_url: '/items/pork-belly-rolled.jpg',
+    image_url: '/items/pork-belly-rolled.png',
   },
   {
     id: 'pork-collar-slice',
@@ -105,7 +105,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 7,
     carb_g: 0,
     icon: '🥩',
-    image_url: '/items/pork-collar-slice.jpg',
+    image_url: '/items/pork-collar-slice.png',
   },
   {
     id: 'tender-beef',
@@ -117,7 +117,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 4,
     carb_g: 0,
     icon: '🥩',
-    image_url: '/items/tender-beef.jpg',
+    image_url: '/items/tender-beef.png',
   },
   {
     id: 'pork-egg',
@@ -129,7 +129,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 8,
     carb_g: 2,
     icon: '🍳',
-    image_url: '/items/pork-egg.jpg',
+    image_url: '/items/pork-egg.png',
     is_popular: true,
   },
   {
@@ -142,7 +142,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 5,
     carb_g: 1,
     icon: '🍳',
-    image_url: '/items/chicken-egg.jpg',
+    image_url: '/items/chicken-egg.png',
   },
   {
     id: 'chicken-slice',
@@ -154,7 +154,43 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 2,
     carb_g: 0,
     icon: '🍗',
-    image_url: '/items/chicken-slice.jpg',
+    image_url: '/items/chicken-slice.png',
+  },
+  {
+    id: 'squid-fresh',
+    name_th: 'ปลาหมึกสด',
+    name_en: 'Fresh Squid / Marinated Squids',
+    category: 'meat',
+    cal_per_tray: 65,
+    protein_g: 13,
+    fat_g: 1,
+    carb_g: 0,
+    icon: '🦑',
+    image_url: '/items/squid-fresh.png',
+  },
+  {
+    id: 'fish-fillet',
+    name_th: 'เนื้อปลาสด (ดอลลี่)',
+    name_en: 'Pangasius Dory Fish Fillet',
+    category: 'meat',
+    cal_per_tray: 75,
+    protein_g: 15,
+    fat_g: 1,
+    carb_g: 0,
+    icon: '🐟',
+    image_url: '/items/fish-fillet.png',
+  },
+  {
+    id: 'jellyfish',
+    name_th: 'แมงกะพรุน',
+    name_en: 'Jellyfish',
+    category: 'meat',
+    cal_per_tray: 35,
+    protein_g: 6,
+    fat_g: 0,
+    carb_g: 1,
+    icon: '🪼',
+    image_url: '/items/jellyfish.png',
   },
 
   // ==================== 2. BALLS & DUMPLINGS (ลูกชิ้น / เกี๊ยว) ====================
@@ -168,7 +204,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 3,
     carb_g: 3,
     icon: '🎋',
-    image_url: '/items/bamboo-chicken-shiitake.jpg',
+    image_url: '/items/bamboo-chicken-shiitake.png',
   },
   {
     id: 'seasoned-seaweed-roll',
@@ -180,7 +216,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 6,
     carb_g: 6,
     icon: '🍙',
-    image_url: '/items/seasoned-seaweed-roll.jpg',
+    image_url: '/items/seasoned-seaweed-roll.png',
     is_popular: true,
   },
   {
@@ -193,7 +229,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 0.5,
     carb_g: 9,
     icon: '🦀',
-    image_url: '/items/crab-stick.jpg',
+    image_url: '/items/crab-stick.png',
   },
   {
     id: 'fish-tofu',
@@ -205,7 +241,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 2.5,
     carb_g: 6,
     icon: '🟨',
-    image_url: '/items/fish-tofu.jpg',
+    image_url: '/items/fish-tofu.png',
   },
   {
     id: 'pingpong-fishball',
@@ -217,7 +253,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 1.5,
     carb_g: 7,
     icon: '⚪',
-    image_url: '/items/pingpong-fishball.jpg',
+    image_url: '/items/pingpong-fishball.png',
   },
   {
     id: 'rugby-fishball',
@@ -229,7 +265,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 2,
     carb_g: 7,
     icon: '🏉',
-    image_url: '/items/rugby-fishball.jpg',
+    image_url: '/items/rugby-fishball.png',
   },
 
   // ==================== 3. VEGGIES & MUSHROOMS (ผัก / เห็ด / ไข่) ====================
@@ -243,7 +279,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 0,
     carb_g: 2.5,
     icon: '🥬',
-    image_url: '/items/bok-choy.jpg',
+    image_url: '/items/bok-choy.png',
   },
   {
     id: 'chinese-cabbage',
@@ -255,7 +291,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 0,
     carb_g: 3,
     icon: '🥬',
-    image_url: '/items/chinese-cabbage.jpg',
+    image_url: '/items/chinese-cabbage.png',
   },
   {
     id: 'morning-glory',
@@ -267,7 +303,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 0,
     carb_g: 3,
     icon: '🌱',
-    image_url: '/items/morning-glory.jpg',
+    image_url: '/items/morning-glory.png',
   },
   {
     id: 'shredded-cabbage',
@@ -279,7 +315,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 0,
     carb_g: 3.5,
     icon: '🥗',
-    image_url: '/items/shredded-cabbage.jpg',
+    image_url: '/items/shredded-cabbage.png',
   },
   {
     id: 'egg-tofu',
@@ -291,7 +327,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 2.5,
     carb_g: 1.5,
     icon: '🟡',
-    image_url: '/items/egg-tofu.jpg',
+    image_url: '/items/egg-tofu.png',
   },
   {
     id: 'green-wakame',
@@ -303,7 +339,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 0,
     carb_g: 3,
     icon: '🌿',
-    image_url: '/items/green-wakame.jpg',
+    image_url: '/items/green-wakame.png',
   },
   {
     id: 'king-oyster-mushroom',
@@ -315,7 +351,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 0,
     carb_g: 3.5,
     icon: '🍄',
-    image_url: '/items/king-oyster-mushroom.jpg',
+    image_url: '/items/king-oyster-mushroom.png',
   },
   {
     id: 'enoki-mushroom',
@@ -327,7 +363,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 0,
     carb_g: 4,
     icon: '🍄',
-    image_url: '/items/enoki-mushroom.jpg',
+    image_url: '/items/enoki-mushroom.png',
   },
   {
     id: 'fresh-hen-egg',
@@ -339,10 +375,10 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 5,
     carb_g: 0.5,
     icon: '🥚',
-    image_url: '/items/fresh-hen-egg.jpg',
+    image_url: '/items/fresh-hen-egg.png',
   },
 
-  // ==================== 4. CARBS & PROMO SPECIALS (เส้น / ข้าว / หมั่นโถว) ====================
+  // ==================== 4. CARBS & PROMO SPECIALS (เส้น / ข้าว / หมั่นโถว / ซาลาเปา) ====================
   {
     id: 'wunsen-noodle',
     name_th: 'วุ้นเส้น',
@@ -353,7 +389,7 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 0,
     carb_g: 18,
     icon: '🥢',
-    image_url: '/items/wunsen-noodle.jpg',
+    image_url: '/items/wunsen-noodle.png',
   },
   {
     id: 'steamed-rice',
@@ -365,7 +401,19 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 0.5,
     carb_g: 35,
     icon: '🍚',
-    image_url: '/items/steamed-rice.jpg',
+    image_url: '/items/steamed-rice.png',
+  },
+  {
+    id: 'custard-bun',
+    name_th: 'ซาลาเปาไส้ครีม (Custard Bun)',
+    name_en: 'Custard Steamed Bun',
+    category: 'carbs',
+    cal_per_tray: 120,
+    protein_g: 3,
+    fat_g: 3,
+    carb_g: 20,
+    icon: '🥟',
+    image_url: '/items/custard-bun.png',
   },
   {
     id: 'fried-mantou',
@@ -471,10 +519,10 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
 ];
 
 export const CATEGORY_LABELS: Record<string, { th: string; en: string; icon: string }> = {
-  all: { th: 'ทั้งหมด', en: 'All 29+ Items', icon: '✨' },
+  all: { th: 'ทั้งหมด', en: 'All Items', icon: '✨' },
   meat: { th: 'เนื้อสัตว์/ซีฟู้ด', en: 'Meats & Seafood', icon: '🥩' },
   balls: { th: 'ลูกชิ้น/เกี๊ยว', en: 'Balls & Dumplings', icon: '🍡' },
   veggies: { th: 'ผัก/เห็ด/ไข่', en: 'Veggies & Mushrooms', icon: '🥬' },
-  carbs: { th: 'เส้น/ข้าว/หมั่นโถว', en: 'Carbs & Desserts', icon: '🍜' },
+  carbs: { th: 'เส้น/ข้าว/ติ่มซำ', en: 'Carbs & Dim Sum', icon: '🍜' },
   sauce: { th: 'น้ำจิ้ม/ซุป', en: 'Sauces & Broth', icon: '🥣' },
 };

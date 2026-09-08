@@ -1,25 +1,35 @@
 import React from 'react';
-import { Flame, RefreshCw, Sun, SunDim, Receipt, UtensilsCrossed, Trophy, Target, Calculator } from 'lucide-react';
-import { MacroTotals, UserSettings } from '../types';
+import { Flame, RefreshCw, Sun, SunDim, Receipt, UtensilsCrossed, Trophy, Target, Calculator, LogIn, LogOut, User as UserIcon, History } from 'lucide-react';
+import { MacroTotals, UserSettings, AuthUser } from '../types';
 
 interface HeaderStatsProps {
   totals: MacroTotals;
   userSettings: UserSettings;
+  authUser: AuthUser | null;
+  savedSessionsCount?: number;
+  onLogout: () => void;
+  authServerUrl: string;
   wakeLockActive: boolean;
   onToggleWakeLock: () => void;
   onResetTable: () => void;
   onOpenSummary: () => void;
   onOpenTdeeModal: () => void;
+  onOpenHistory: () => void;
 }
 
 export const HeaderStats: React.FC<HeaderStatsProps> = ({
   totals,
   userSettings,
+  authUser,
+  savedSessionsCount = 0,
+  onLogout,
+  authServerUrl,
   wakeLockActive,
   onToggleWakeLock,
   onResetTable,
   onOpenSummary,
   onOpenTdeeModal,
+  onOpenHistory,
 }) => {
   const [showResetConfirm, setShowResetConfirm] = React.useState(false);
 
@@ -61,6 +71,34 @@ export const HeaderStats: React.FC<HeaderStatsProps> = ({
           </div>
 
           <div className="flex items-center gap-2">
+            {/* Central Google Auth Button / User Profile */}
+            {authUser ? (
+              <div className="flex items-center gap-1.5 bg-mk-card border border-mk-border p-1 rounded-xl">
+                {authUser.avatarUrl ? (
+                  <img src={authUser.avatarUrl} alt={authUser.displayName || 'User'} className="w-6 h-6 rounded-full" />
+                ) : (
+                  <UserIcon className="w-4 h-4 text-gray-300" />
+                )}
+                <span className="text-xs font-semibold text-gray-200 hidden md:inline">{authUser.displayName || authUser.email}</span>
+                <button
+                  onClick={onLogout}
+                  className="p-1 text-gray-400 hover:text-red-400 rounded-lg transition-colors"
+                  title="ออกจากระบบ (Sign Out)"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ) : (
+              <a
+                href={`${authServerUrl}/auth/google?redirect=${encodeURIComponent(window.location.href)}`}
+                className="px-2.5 py-2 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 text-xs font-semibold flex items-center gap-1.5 transition-all active-press"
+                title="เข้าสู่ระบบด้วย Google"
+              >
+                <LogIn className="w-3.5 h-3.5 text-blue-400" />
+                <span className="hidden sm:inline">Sign in Google</span>
+              </a>
+            )}
+
             {/* TDEE & Deficit Planner Button */}
             <button
               onClick={onOpenTdeeModal}
@@ -96,6 +134,21 @@ export const HeaderStats: React.FC<HeaderStatsProps> = ({
             >
               <RefreshCw className={`w-3.5 h-3.5 ${showResetConfirm ? 'animate-spin' : ''}`} />
               <span>{showResetConfirm ? 'ยืนยันล้างโต๊ะ?' : 'ล้างโต๊ะ'}</span>
+            </button>
+
+            {/* Saved Sessions History Trigger */}
+            <button
+              onClick={onOpenHistory}
+              className="px-2.5 py-2 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 font-semibold text-xs flex items-center gap-1.5 transition-all active-press"
+              title="ดูประวัติมื้ออาหารที่บันทึกไว้"
+            >
+              <History className="w-3.5 h-3.5 text-blue-400" />
+              <span className="hidden sm:inline">ประวัติมื้อ</span>
+              {savedSessionsCount > 0 && (
+                <span className="bg-blue-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full">
+                  {savedSessionsCount}
+                </span>
+              )}
             </button>
 
             {/* Summary Receipt Modal Trigger */}

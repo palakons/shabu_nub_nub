@@ -3,6 +3,7 @@ import { HeaderStats } from './components/HeaderStats';
 import { CategoryFilter } from './components/CategoryFilter';
 import { TrayCard } from './components/TrayCard';
 import { MealSummaryModal } from './components/MealSummaryModal';
+import { SavedSessionsModal } from './components/SavedSessionsModal';
 import { TdeeSettingsModal } from './components/TdeeSettingsModal';
 import { LegalDisclaimer } from './components/LegalDisclaimer';
 import { useTableStore } from './hooks/useTableStore';
@@ -16,17 +17,26 @@ export default function App() {
     totals,
     userSettings,
     updateUserSettings,
+    authUser,
+    handleLogout,
+    AUTH_SERVER_URL,
     addItem,
     removeItem,
     quickAddFive,
     resetTable,
     wakeLockActive,
     toggleWakeLock,
+    saveDiningSession,
+    savedSessions,
+    fetchSavedSessions,
+    loadSessionToTable,
+    deleteSavedSession,
   } = useTableStore();
 
   const [activeCategory, setActiveCategory] = useState<Category>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isTdeeModalOpen, setIsTdeeModalOpen] = useState(false);
 
   const imageMode = userSettings.imageMode || 'official';
@@ -49,11 +59,16 @@ export default function App() {
       <HeaderStats
         totals={totals}
         userSettings={userSettings}
+        authUser={authUser}
+        savedSessionsCount={savedSessions.length}
+        onLogout={handleLogout}
+        authServerUrl={AUTH_SERVER_URL}
         wakeLockActive={wakeLockActive}
         onToggleWakeLock={toggleWakeLock}
         onResetTable={resetTable}
         onOpenSummary={() => setIsSummaryOpen(true)}
         onOpenTdeeModal={() => setIsTdeeModalOpen(true)}
+        onOpenHistory={() => setIsHistoryOpen(true)}
       />
 
       {/* Main Content Body */}
@@ -140,6 +155,9 @@ export default function App() {
         orders={orders}
         totals={totals}
         userSettings={userSettings}
+        authUser={authUser}
+        onSaveSession={saveDiningSession}
+        authServerUrl={AUTH_SERVER_URL}
       />
 
       {/* TDEE & Target Deficit Settings Modal */}
@@ -148,6 +166,16 @@ export default function App() {
         onClose={() => setIsTdeeModalOpen(false)}
         userSettings={userSettings}
         onUpdateSettings={updateUserSettings}
+      />
+
+      {/* Saved Meal Sessions History Modal */}
+      <SavedSessionsModal
+        isOpen={isHistoryOpen}
+        onClose={() => setIsHistoryOpen(false)}
+        sessions={savedSessions}
+        onLoadSession={loadSessionToTable}
+        onDeleteSession={deleteSavedSession}
+        onRefresh={fetchSavedSessions}
       />
     </div>
   );
