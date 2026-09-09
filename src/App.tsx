@@ -10,6 +10,7 @@ import { useTableStore } from './hooks/useTableStore';
 import { MK_MENU_ITEMS } from './data/mkMenu';
 import { Category } from './types';
 import { ShoppingBag, Flame, Sparkles } from 'lucide-react';
+import { trackEvent } from './utils/telemetry';
 
 export default function App() {
   const {
@@ -66,7 +67,10 @@ export default function App() {
         wakeLockActive={wakeLockActive}
         onToggleWakeLock={toggleWakeLock}
         onResetTable={resetTable}
-        onOpenSummary={() => setIsSummaryOpen(true)}
+        onOpenSummary={() => {
+          trackEvent('macro_tab_view');
+          setIsSummaryOpen(true);
+        }}
         onOpenTdeeModal={() => setIsTdeeModalOpen(true)}
         onOpenHistory={() => setIsHistoryOpen(true)}
       />
@@ -127,7 +131,10 @@ export default function App() {
       {totals.totalTrays > 0 && (
         <div className="fixed bottom-4 left-4 right-4 z-30 max-w-lg mx-auto animate-bounce-subtle">
           <button
-            onClick={() => setIsSummaryOpen(true)}
+            onClick={() => {
+              trackEvent('macro_tab_view');
+              setIsSummaryOpen(true);
+            }}
             className="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-mk-red to-red-600 text-white font-extrabold text-sm flex items-center justify-between shadow-2xl border border-white/20 hover:brightness-110 active-press"
           >
             <div className="flex items-center gap-2.5">

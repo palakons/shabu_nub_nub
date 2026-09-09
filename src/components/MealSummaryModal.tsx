@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Copy, Check, Share2, Flame, Award, Utensils, Zap, Target, Save, LogIn, CheckCircle2 } from 'lucide-react';
 import { TableOrders, MacroTotals, UserSettings, AuthUser } from '../types';
 import { MK_MENU_ITEMS } from '../data/mkMenu';
+import { trackEvent } from '../utils/telemetry';
 
 interface MealSummaryModalProps {
   isOpen: boolean;
@@ -62,6 +63,7 @@ export const MealSummaryModal: React.FC<MealSummaryModalProps> = ({
   };
 
   const handleCopyText = () => {
+    trackEvent('share_click', { action: 'receipt_export' });
     navigator.clipboard.writeText(generateSummaryText());
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);

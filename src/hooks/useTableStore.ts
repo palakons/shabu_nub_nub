@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import confetti from 'canvas-confetti';
 import { TableOrders, MacroTotals, UserSettings, AuthUser, SavedDiningSession } from '../types';
 import { MK_MENU_ITEMS } from '../data/mkMenu';
+import { trackEvent, trackUsageEvent } from '../utils/telemetry';
 
 const LOCAL_STORAGE_KEY = 'mk_buffet_299_table_orders_v1';
 const SETTINGS_STORAGE_KEY = 'mk_buffet_299_user_settings_v1';
@@ -101,6 +102,9 @@ export function useTableStore() {
       .catch(() => {
         // Guest mode fallback on network failure
       });
+
+    // Track initial page view telemetry
+    trackEvent('page_view', { path: typeof window !== 'undefined' ? window.location.pathname : '/' });
   }, []);
 
   const handleLogout = useCallback(async () => {
@@ -172,6 +176,8 @@ export function useTableStore() {
 
   // Order Operations
   const addItem = useCallback((itemId: string) => {
+    const item = MK_MENU_ITEMS.find(m => m.id === itemId);
+    trackEvent('tray_add', { dishId: itemId, dishName: item?.name_th || itemId, category: item?.category || 'other', count: 1 });
     setOrders(prev => {
       const current = prev[itemId] || 0;
       return { ...prev, [itemId]: current + 1 };
@@ -191,6 +197,8 @@ export function useTableStore() {
   }, []);
 
   const quickAddFive = useCallback((itemId: string) => {
+    const item = MK_MENU_ITEMS.find(m => m.id === itemId);
+    trackEvent('tray_add', { dishId: itemId, dishName: item?.name_th || itemId, category: item?.category || 'other', count: 5 });
     setOrders(prev => {
       const current = prev[itemId] || 0;
       return { ...prev, [itemId]: current + 5 };
@@ -206,10 +214,6 @@ export function useTableStore() {
       }
       return { ...prev, [itemId]: qty };
     });
-  }, []);
-
-  const resetTable = useCallback(() => {
-    setOrders({});
   }, []);
 
   // Compute live macro metrics
@@ -234,6 +238,11 @@ export function useTableStore() {
 
     return { calories, protein, fat, carbs, totalTrays };
   }, [orders]);
+
+  const resetTable = useCallback(() => {
+    trackUsageEvent('reset_table', { totalTrays: totals.totalTrays, totalCalories: totals.calories });
+    setOrders({});
+  }, [totals]);
 
   // Confetti trigger when protein hits milestones (e.g. 100g)
   const triggerConfetti = useCallback(() => {
@@ -269,6 +278,8 @@ export function useTableStore() {
       costThb: 299,
       itemsJson: activeItems,
     };
+
+    trackEvent('session_save', { totalTrays: totals.totalTrays, totalCalories: totals.calories, costThb: 299 });
 
     let savedOnServer = false;
     let serverSessionId: string | null = null;
