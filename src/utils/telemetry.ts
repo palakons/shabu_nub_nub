@@ -1,4 +1,6 @@
-const AUTH_SERVER_URL = (import.meta as unknown as { env: Record<string, string> }).env?.VITE_AUTH_SERVER_URL || 'http://localhost:4000';
+const env = (import.meta as unknown as { env: Record<string, string | boolean> }).env;
+const DEFAULT_AUTH_URL = env?.PROD ? 'https://auth.longwarp.com' : 'http://localhost:4000';
+const AUTH_SERVER_URL = (env?.VITE_AUTH_SERVER_URL as string) || DEFAULT_AUTH_URL;
 
 export const getAnonSessionId = (): string => {
   try {

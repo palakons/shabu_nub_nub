@@ -23,7 +23,7 @@ export const MealSummaryModal: React.FC<MealSummaryModalProps> = ({
   userSettings,
   authUser,
   onSaveSession,
-  authServerUrl = 'http://localhost:4000',
+  authServerUrl = (import.meta as unknown as { env: Record<string, string | boolean> }).env?.PROD ? 'https://auth.longwarp.com' : 'http://localhost:4000',
 }) => {
   const [copied, setCopied] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
