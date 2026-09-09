@@ -468,20 +468,8 @@ export const MK_MENU_ITEMS: ExtendedMenuItem[] = [
     fat_g: 1,
     carb_g: 14,
     icon: '🥣',
-    image_url: '/items/mk-suki-sauce.jpg',
+    image_url: '/items/mk-suki-sauce.png',
     is_popular: true,
-  },
-  {
-    id: 'clear-broth',
-    name_th: 'ซุปใส MK (1 ถ้วย)',
-    name_en: 'MK Clear Suki Broth (1 cup)',
-    category: 'sauce',
-    cal_per_tray: 25,
-    protein_g: 2,
-    fat_g: 1,
-    carb_g: 2,
-    icon: '🍲',
-    image_url: '/items/clear-broth.jpg',
   },
 
   // ==================== 6. ADD-ON TIERS (+59 THB / +99 THB PROMO) ====================

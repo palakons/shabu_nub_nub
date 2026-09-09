@@ -1,6 +1,22 @@
-const env = (import.meta as unknown as { env: Record<string, string | boolean> }).env;
-const DEFAULT_AUTH_URL = env?.PROD ? 'https://auth.longwarp.com' : 'http://localhost:4000';
-const AUTH_SERVER_URL = (env?.VITE_AUTH_SERVER_URL as string) || DEFAULT_AUTH_URL;
+export const getAuthBaseUrl = (): string => {
+  const env = (import.meta as unknown as { env: Record<string, string | boolean> }).env;
+  if (env?.VITE_AUTH_URL && typeof env.VITE_AUTH_URL === 'string') {
+    return env.VITE_AUTH_URL.replace(/\/+$/, '');
+  }
+  if (env?.VITE_AUTH_SERVER_URL && typeof env.VITE_AUTH_SERVER_URL === 'string') {
+    return env.VITE_AUTH_SERVER_URL.replace(/\/+$/, '');
+  }
+  if (typeof window !== 'undefined') {
+    const host = window.location.hostname;
+    if (host === 'localhost' || host === '127.0.0.1') {
+      return 'http://localhost:4000';
+    }
+    if (host.endsWith('longwarp.com')) {
+      return 'https://auth.longwarp.com';
+    }
+  }
+  return 'https://auth.longwarp.com';
+};
 
 export const getAnonSessionId = (): string => {
   try {
@@ -58,7 +74,7 @@ export const trackEvent = (eventType: string, metadata: Record<string, unknown> 
       metadata: enrichedMetadata,
     });
 
-    const url = `${AUTH_SERVER_URL}/api/shabu/telemetry`;
+    const url = `${getAuthBaseUrl()}/api/shabu/telemetry`;
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),

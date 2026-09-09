@@ -5,6 +5,7 @@ import { TrayCard } from './components/TrayCard';
 import { MealSummaryModal } from './components/MealSummaryModal';
 import { SavedSessionsModal } from './components/SavedSessionsModal';
 import { TdeeSettingsModal } from './components/TdeeSettingsModal';
+import { FeedbackModal } from './components/FeedbackModal';
 import { LegalDisclaimer } from './components/LegalDisclaimer';
 import { useTableStore } from './hooks/useTableStore';
 import { MK_MENU_ITEMS } from './data/mkMenu';
@@ -38,6 +39,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [isTdeeModalOpen, setIsTdeeModalOpen] = useState(false);
 
   const imageMode = userSettings.imageMode || 'official';
@@ -73,6 +75,7 @@ export default function App() {
         }}
         onOpenTdeeModal={() => setIsTdeeModalOpen(true)}
         onOpenHistory={() => setIsHistoryOpen(true)}
+        onOpenFeedback={() => setIsFeedbackOpen(true)}
       />
 
       {/* Main Content Body */}
@@ -127,33 +130,7 @@ export default function App() {
         />
       </main>
 
-      {/* Sticky Bottom Floating Bar for Mobile Quick Summary */}
-      {totals.totalTrays > 0 && (
-        <div className="fixed bottom-4 left-4 right-4 z-30 max-w-lg mx-auto animate-bounce-subtle">
-          <button
-            onClick={() => {
-              trackEvent('macro_tab_view');
-              setIsSummaryOpen(true);
-            }}
-            className="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-mk-red to-red-600 text-white font-extrabold text-sm flex items-center justify-between shadow-2xl border border-white/20 hover:brightness-110 active-press"
-          >
-            <div className="flex items-center gap-2.5">
-              <div className="p-1.5 rounded-lg bg-black/20">
-                <ShoppingBag className="w-5 h-5" />
-              </div>
-              <div className="text-left">
-                <div className="text-xs font-normal text-red-200">ดูสรุปมื้ออาหาร</div>
-                <div className="text-sm font-bold">{totals.totalTrays} ถาดบนโต๊ะ</div>
-              </div>
-            </div>
 
-            <div className="flex items-center gap-2 bg-black/25 px-3 py-1.5 rounded-xl border border-white/10">
-              <Flame className="w-4 h-4 text-amber-300" />
-              <span>{totals.calories.toLocaleString()} kcal</span>
-            </div>
-          </button>
-        </div>
-      )}
 
       {/* Meal Summary Modal */}
       <MealSummaryModal
@@ -183,6 +160,13 @@ export default function App() {
         onLoadSession={loadSessionToTable}
         onDeleteSession={deleteSavedSession}
         onRefresh={fetchSavedSessions}
+      />
+      {/* User Feedback & Feature Request Modal */}
+      <FeedbackModal
+        isOpen={isFeedbackOpen}
+        onClose={() => setIsFeedbackOpen(false)}
+        authServerUrl={AUTH_SERVER_URL}
+        authUserEmail={authUser?.email}
       />
     </div>
   );

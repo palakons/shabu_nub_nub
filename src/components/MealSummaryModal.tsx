@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { X, Copy, Check, Share2, Flame, Award, Utensils, Zap, Target, Save, LogIn, CheckCircle2 } from 'lucide-react';
 import { TableOrders, MacroTotals, UserSettings, AuthUser } from '../types';
 import { MK_MENU_ITEMS } from '../data/mkMenu';
-import { trackEvent } from '../utils/telemetry';
+import { trackEvent, getAuthBaseUrl } from '../utils/telemetry';
 
 interface MealSummaryModalProps {
   isOpen: boolean;
@@ -23,8 +23,9 @@ export const MealSummaryModal: React.FC<MealSummaryModalProps> = ({
   userSettings,
   authUser,
   onSaveSession,
-  authServerUrl = (import.meta as unknown as { env: Record<string, string | boolean> }).env?.PROD ? 'https://auth.longwarp.com' : 'http://localhost:4000',
+  authServerUrl,
 }) => {
+  const targetAuthUrl = authServerUrl || getAuthBaseUrl();
   const [copied, setCopied] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
@@ -253,7 +254,7 @@ export const MealSummaryModal: React.FC<MealSummaryModalProps> = ({
                   เข้าสู่ระบบเพื่อบันทึกประวัติการทาน MK บุฟเฟต์นี้ พร้อมสะสมโปรตีนและแคลอรีรวมในระบบ central account
                 </p>
                 <a
-                  href={`${authServerUrl}/auth/google?redirect=${encodeURIComponent(window.location.href)}`}
+                  href={`${targetAuthUrl}/auth/google?redirect=${encodeURIComponent(window.location.href)}`}
                   className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-600 hover:brightness-110 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-blue-900/40 active-press"
                 >
                   <LogIn className="w-4 h-4 text-blue-200" />

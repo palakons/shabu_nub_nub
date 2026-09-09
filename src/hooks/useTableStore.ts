@@ -2,13 +2,11 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import confetti from 'canvas-confetti';
 import { TableOrders, MacroTotals, UserSettings, AuthUser, SavedDiningSession } from '../types';
 import { MK_MENU_ITEMS } from '../data/mkMenu';
-import { trackEvent, trackUsageEvent } from '../utils/telemetry';
+import { trackEvent, trackUsageEvent, getAuthBaseUrl } from '../utils/telemetry';
 
 const LOCAL_STORAGE_KEY = 'mk_buffet_299_table_orders_v1';
 const SETTINGS_STORAGE_KEY = 'mk_buffet_299_user_settings_v1';
-const env = (import.meta as unknown as { env: Record<string, string | boolean> }).env;
-const DEFAULT_AUTH_URL = env?.PROD ? 'https://auth.longwarp.com' : 'http://localhost:4000';
-const AUTH_SERVER_URL = (env?.VITE_AUTH_SERVER_URL as string) || DEFAULT_AUTH_URL;
+const AUTH_SERVER_URL = getAuthBaseUrl();
 
 const DEFAULT_SETTINGS: UserSettings = {
   tdee: 2000,
