@@ -1,5 +1,5 @@
-import React from 'react';
-import { Flame, RefreshCw, Sun, SunDim, Receipt, UtensilsCrossed, Trophy, Target, Calculator, LogIn, LogOut, User as UserIcon, History, MessageSquare } from 'lucide-react';
+import React, { useState } from 'react';
+import { Flame, RefreshCw, Sun, SunDim, Receipt, UtensilsCrossed, Trophy, Target, Calculator, LogIn, LogOut, User as UserIcon, History, MessageSquare, MoreHorizontal, ChevronUp } from 'lucide-react';
 import { MacroTotals, UserSettings, AuthUser } from '../types';
 import { getAuthBaseUrl } from '../utils/telemetry';
 
@@ -35,7 +35,8 @@ export const HeaderStats: React.FC<HeaderStatsProps> = ({
   onOpenFeedback,
 }) => {
   const targetAuthUrl = authServerUrl || getAuthBaseUrl();
-  const [showResetConfirm, setShowResetConfirm] = React.useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [isActionsExpanded, setIsActionsExpanded] = useState(false);
 
   // Calculate macro percentage split
   const totalMacroGrams = totals.protein + totals.fat + totals.carbs || 1;
@@ -80,46 +81,49 @@ export const HeaderStats: React.FC<HeaderStatsProps> = ({
             </div>
           </div>
 
-          {/* Action Button Strip (Scrollable on small mobile screens) */}
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 max-w-full justify-end">
-            {/* Screen Wake Lock */}
-            <button
-              onClick={onToggleWakeLock}
-              className={`p-1.5 sm:px-2 py-1.5 rounded-xl border text-[11px] font-medium flex items-center gap-1 shrink-0 transition-all active-press ${
-                wakeLockActive
-                  ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 shadow-glow-gold'
-                  : 'bg-mk-card border-mk-border text-gray-400 hover:text-gray-200'
-              }`}
-              title="เปิดหน้าจอค้างไว้ขณะรับประทานอาหาร"
-            >
-              {wakeLockActive ? <Sun className="w-3.5 h-3.5 text-amber-400 animate-pulse" /> : <SunDim className="w-3.5 h-3.5" />}
-              <span className="hidden md:inline">{wakeLockActive ? 'จอเปิด' : 'เปิดจอ'}</span>
-            </button>
+          {/* Action Buttons Row */}
+          <div className="flex items-center gap-1.5 justify-end">
+            {/* Secondary actions (Collapsible on mobile) */}
+            <div className={`items-center gap-1.5 ${isActionsExpanded ? 'flex' : 'hidden sm:flex'}`}>
+              {/* Screen Wake Lock */}
+              <button
+                onClick={onToggleWakeLock}
+                className={`p-1.5 sm:px-2 py-1 rounded-xl border text-[11px] font-medium flex items-center gap-1 shrink-0 transition-all active-press ${
+                  wakeLockActive
+                    ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 shadow-glow-gold'
+                    : 'bg-mk-card border-mk-border text-gray-400 hover:text-gray-200'
+                }`}
+                title="เปิดหน้าจอค้างไว้ขณะรับประทานอาหาร"
+              >
+                {wakeLockActive ? <Sun className="w-3.5 h-3.5 text-amber-400 animate-pulse" /> : <SunDim className="w-3.5 h-3.5" />}
+                <span className="hidden md:inline">{wakeLockActive ? 'จอเปิด' : 'เปิดจอ'}</span>
+              </button>
 
-            {/* Reset Table */}
-            <button
-              onClick={handleResetClick}
-              className={`px-2 py-1.5 rounded-xl border text-[11px] font-semibold flex items-center gap-1 shrink-0 transition-all active-press ${
-                showResetConfirm
-                  ? 'bg-red-600 border-red-500 text-white animate-pulse'
-                  : 'bg-mk-card border-mk-border text-gray-300 hover:border-red-500/50 hover:text-red-400'
-              }`}
-            >
-              <RefreshCw className={`w-3 h-3 ${showResetConfirm ? 'animate-spin' : ''}`} />
-              <span>{showResetConfirm ? 'ยืนยัน?' : 'ล้างโต๊ะ'}</span>
-            </button>
+              {/* Reset Table */}
+              <button
+                onClick={handleResetClick}
+                className={`px-2 py-1 rounded-xl border text-[11px] font-semibold flex items-center gap-1 shrink-0 transition-all active-press ${
+                  showResetConfirm
+                    ? 'bg-red-600 border-red-500 text-white animate-pulse'
+                    : 'bg-mk-card border-mk-border text-gray-300 hover:border-red-500/50 hover:text-red-400'
+                }`}
+              >
+                <RefreshCw className={`w-3 h-3 ${showResetConfirm ? 'animate-spin' : ''}`} />
+                <span>{showResetConfirm ? 'ยืนยัน?' : 'ล้างโต๊ะ'}</span>
+              </button>
 
-            {/* Feedback */}
-            <button
-              onClick={onOpenFeedback}
-              className="p-1.5 sm:px-2 py-1.5 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 text-purple-300 font-semibold text-[11px] flex items-center gap-1 shrink-0 transition-all active-press"
-              title="ส่งข้อเสนอแนะ / แจ้งปัญหา"
-            >
-              <MessageSquare className="w-3.5 h-3.5 text-purple-400" />
-              <span className="hidden lg:inline">ข้อเสนอแนะ</span>
-            </button>
+              {/* Feedback */}
+              <button
+                onClick={onOpenFeedback}
+                className="p-1.5 sm:px-2 py-1 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 text-purple-300 font-semibold text-[11px] flex items-center gap-1 shrink-0 transition-all active-press"
+                title="ส่งข้อเสนอแนะ / แจ้งปัญหา"
+              >
+                <MessageSquare className="w-3.5 h-3.5 text-purple-400" />
+                <span className="hidden lg:inline">ข้อเสนอแนะ</span>
+              </button>
+            </div>
 
-            {/* User Profile / Login (Grouped right next to History) */}
+            {/* Core User Identity & History Buttons (Always visible) */}
             {authUser ? (
               <div className="flex items-center gap-1 bg-mk-card border border-mk-border p-1 rounded-xl shrink-0">
                 {authUser.avatarUrl ? (
@@ -141,22 +145,22 @@ export const HeaderStats: React.FC<HeaderStatsProps> = ({
             ) : (
               <a
                 href={`${targetAuthUrl}/auth/google?redirect=${encodeURIComponent(window.location.href)}`}
-                className="px-2 py-1.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 text-[11px] font-semibold flex items-center gap-1 shrink-0 transition-all active-press"
+                className="px-2 py-1 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 text-[11px] font-semibold flex items-center gap-1 shrink-0 transition-all active-press"
                 title="เข้าสู่ระบบด้วย Google"
               >
                 <LogIn className="w-3.5 h-3.5 text-blue-400" />
-                <span className="hidden sm:inline">Sign in</span>
+                <span>Sign in</span>
               </a>
             )}
 
             {/* Saved History */}
             <button
               onClick={onOpenHistory}
-              className="px-2 py-1.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 font-semibold text-[11px] flex items-center gap-1 shrink-0 transition-all active-press"
+              className="px-2 py-1 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 font-semibold text-[11px] flex items-center gap-1 shrink-0 transition-all active-press"
               title="ดูประวัติมื้ออาหาร"
             >
               <History className="w-3.5 h-3.5 text-blue-400" />
-              <span className="hidden sm:inline">ประวัติมื้อ</span>
+              <span>ประวัติ</span>
               {savedSessionsCount > 0 && (
                 <span className="bg-blue-500 text-white text-[9px] font-bold px-1 rounded-full">
                   {savedSessionsCount}
@@ -164,14 +168,13 @@ export const HeaderStats: React.FC<HeaderStatsProps> = ({
               )}
             </button>
 
-            {/* Standout Primary Action: สรุป & บันทึกมื้อ */}
+            {/* Mobile Collapse/Expand Toggle Button */}
             <button
-              onClick={onOpenSummary}
-              className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-mk-red via-red-600 to-amber-600 hover:brightness-110 text-white font-extrabold text-[11px] sm:text-xs flex items-center gap-1.5 shadow-glow-red border border-red-400/50 active-press shrink-0"
-              title="ดูสรุปแคลอรีและบันทึกมื้ออาหาร"
+              onClick={() => setIsActionsExpanded(!isActionsExpanded)}
+              className="p-1.5 rounded-xl bg-mk-card border border-mk-border text-gray-400 hover:text-white sm:hidden shrink-0 transition-all active-press"
+              title={isActionsExpanded ? 'ย่อเมนู' : 'ขยายเมนูเครื่องมือ'}
             >
-              <Receipt className="w-4 h-4 text-amber-200" />
-              <span>สรุป & บันทึกมื้อ</span>
+              {isActionsExpanded ? <ChevronUp className="w-4 h-4 text-amber-400" /> : <MoreHorizontal className="w-4 h-4" />}
             </button>
           </div>
         </div>
@@ -229,8 +232,8 @@ export const HeaderStats: React.FC<HeaderStatsProps> = ({
             </div>
           </div>
 
-          {/* Row 2: 4 Key Macro & Value Badges Grid */}
-          <div className="grid grid-cols-4 gap-1 sm:gap-2 pt-0.5 border-t border-mk-border/40">
+          {/* Row 2: 3 Macro Badges + Integrated สรุป & บันทึก CTA Button */}
+          <div className="grid grid-cols-4 gap-1 sm:gap-1.5 pt-0.5 border-t border-mk-border/40">
             {/* Protein */}
             <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-1 text-center">
               <div className="text-[9px] text-gray-400 font-medium">โปรตีน</div>
@@ -249,11 +252,20 @@ export const HeaderStats: React.FC<HeaderStatsProps> = ({
               <div className="text-xs font-extrabold text-rose-400">{totals.fat}g <span className="text-[9px] text-rose-300/70 font-normal">({fPct}%)</span></div>
             </div>
 
-            {/* Cost Efficiency */}
-            <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-1 text-center">
-              <div className="text-[9px] text-gray-400 font-medium">คุ้มค่า 299฿</div>
-              <div className="text-xs font-extrabold text-blue-300">{(299 / (totals.calories || 1)).toFixed(2)} <span className="text-[9px] text-blue-200/70 font-normal">฿/kcal</span></div>
-            </div>
+            {/* Record & Summary Action Button integrated into the metrics/values row */}
+            <button
+              onClick={onOpenSummary}
+              className="bg-gradient-to-r from-mk-red via-red-600 to-amber-600 hover:brightness-110 border border-red-400/50 text-white rounded-xl p-1 flex flex-col items-center justify-center shadow-glow-red active-press transition-all"
+              title="ดูสรุปแคลอรี สารอาหาร และบันทึกมื้ออาหาร"
+            >
+              <div className="text-[9px] text-amber-200/90 font-medium flex items-center gap-0.5 leading-none">
+                <Receipt className="w-2.5 h-2.5" />
+                <span>{(299 / (totals.calories || 1)).toFixed(2)}฿/k</span>
+              </div>
+              <div className="text-[11px] font-black text-white leading-tight mt-0.5">
+                สรุป & บันทึก
+              </div>
+            </button>
           </div>
 
           {/* Row 3: Ultra-thin Macro Split Bar */}
