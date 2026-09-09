@@ -17,6 +17,7 @@ interface HeaderStatsProps {
   onOpenTdeeModal: () => void;
   onOpenHistory: () => void;
   onOpenFeedback: () => void;
+  onOpenThaiRdi: () => void;
 }
 
 export const HeaderStats: React.FC<HeaderStatsProps> = ({
@@ -33,6 +34,7 @@ export const HeaderStats: React.FC<HeaderStatsProps> = ({
   onOpenTdeeModal,
   onOpenHistory,
   onOpenFeedback,
+  onOpenThaiRdi,
 }) => {
   const targetAuthUrl = authServerUrl || getAuthBaseUrl();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
@@ -64,7 +66,7 @@ export const HeaderStats: React.FC<HeaderStatsProps> = ({
     <header className="sticky top-0 z-40 glass-panel border-b border-mk-border shadow-xl backdrop-blur-md">
       <div className="max-w-4xl mx-auto px-2.5 py-2 sm:px-4 sm:py-2.5 space-y-2">
         {/* Top Branding & Action Controls */}
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-2 relative">
           {/* Logo & Branding: My Kal */}
           <div className="flex items-center gap-2 shrink-0">
             <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-mk-red via-red-600 to-amber-600 flex items-center justify-center text-white shadow-glow-red font-black text-sm sm:text-base tracking-tight">
@@ -83,8 +85,8 @@ export const HeaderStats: React.FC<HeaderStatsProps> = ({
 
           {/* Action Buttons Row */}
           <div className="flex items-center gap-1.5 justify-end">
-            {/* Secondary actions (Collapsible on mobile) */}
-            <div className={`items-center gap-1.5 ${isActionsExpanded ? 'flex' : 'hidden sm:flex'}`}>
+            {/* Desktop Secondary Actions (Always inline on tablet & desktop) */}
+            <div className="hidden sm:flex items-center gap-1.5">
               {/* Screen Wake Lock */}
               <button
                 onClick={onToggleWakeLock}
@@ -177,6 +179,52 @@ export const HeaderStats: React.FC<HeaderStatsProps> = ({
               {isActionsExpanded ? <ChevronUp className="w-4 h-4 text-amber-400" /> : <MoreHorizontal className="w-4 h-4" />}
             </button>
           </div>
+
+          {/* Floating Popover Menu on Mobile (Overlays without expanding top header pane height) */}
+          {isActionsExpanded && (
+            <div className="absolute right-0 top-11 z-50 bg-[#18181c] border border-mk-border rounded-2xl p-2 shadow-2xl flex flex-col gap-1.5 w-44 sm:hidden animate-fade-in">
+              <button
+                onClick={() => {
+                  onToggleWakeLock();
+                  setIsActionsExpanded(false);
+                }}
+                className={`p-2 rounded-xl border text-xs font-semibold flex items-center gap-2 transition-all ${
+                  wakeLockActive
+                    ? 'bg-amber-500/20 border-amber-500/50 text-amber-300'
+                    : 'bg-mk-card border-mk-border text-gray-300'
+                }`}
+              >
+                {wakeLockActive ? <Sun className="w-4 h-4 text-amber-400 animate-pulse" /> : <SunDim className="w-4 h-4" />}
+                <span>{wakeLockActive ? 'เปิดจอค้างไว้' : 'เปิดจอค้าง'}</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  handleResetClick();
+                  if (showResetConfirm) setIsActionsExpanded(false);
+                }}
+                className={`p-2 rounded-xl border text-xs font-semibold flex items-center gap-2 transition-all ${
+                  showResetConfirm
+                    ? 'bg-red-600 border-red-500 text-white animate-pulse'
+                    : 'bg-mk-card border-mk-border text-gray-300 hover:text-red-400'
+                }`}
+              >
+                <RefreshCw className={`w-4 h-4 ${showResetConfirm ? 'animate-spin' : ''}`} />
+                <span>{showResetConfirm ? 'ยืนยันล้างโต๊ะ?' : 'ล้างโต๊ะ'}</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  onOpenFeedback();
+                  setIsActionsExpanded(false);
+                }}
+                className="p-2 rounded-xl bg-purple-600/20 border border-purple-500/40 text-purple-300 text-xs font-semibold flex items-center gap-2 hover:bg-purple-600/30"
+              >
+                <MessageSquare className="w-4 h-4 text-purple-400" />
+                <span>ส่งข้อเสนอแนะ</span>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Ultra-Compact Unified Dashboard Card */}
@@ -232,8 +280,8 @@ export const HeaderStats: React.FC<HeaderStatsProps> = ({
             </div>
           </div>
 
-          {/* Row 2: 3 Macro Badges + Integrated สรุป & บันทึก CTA Button */}
-          <div className="grid grid-cols-4 gap-1 sm:gap-1.5 pt-0.5 border-t border-mk-border/40">
+          {/* Row 2: 3 Macro Badges + Thai RDI Button + Integrated สรุป & บันทึก CTA Button */}
+          <div className="grid grid-cols-5 gap-1 sm:gap-1.5 pt-0.5 border-t border-mk-border/40">
             {/* Protein */}
             <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-1 text-center">
               <div className="text-[9px] text-gray-400 font-medium">โปรตีน</div>
@@ -252,6 +300,21 @@ export const HeaderStats: React.FC<HeaderStatsProps> = ({
               <div className="text-xs font-extrabold text-rose-400">{totals.fat}g <span className="text-[9px] text-rose-300/70 font-normal">({fPct}%)</span></div>
             </div>
 
+            {/* Thai RDI Comparison Button right next to Record & Summary */}
+            <button
+              onClick={onOpenThaiRdi}
+              className="bg-blue-600/20 hover:bg-blue-600/35 border border-blue-500/40 text-blue-300 rounded-xl p-1 flex flex-col items-center justify-center active-press transition-all"
+              title="เปรียบเทียบโภชนาการกับเกณฑ์ Thai RDI (กรมอนามัย 2,000 kcal)"
+            >
+              <div className="text-[9px] text-blue-200/90 font-medium flex items-center gap-0.5 leading-none">
+                <span>🇹🇭</span>
+                <span>เกณฑ์</span>
+              </div>
+              <div className="text-[10px] font-bold text-blue-300 leading-tight mt-0.5 truncate">
+                Thai RDI
+              </div>
+            </button>
+
             {/* Record & Summary Action Button integrated into the metrics/values row */}
             <button
               onClick={onOpenSummary}
@@ -262,7 +325,7 @@ export const HeaderStats: React.FC<HeaderStatsProps> = ({
                 <Receipt className="w-2.5 h-2.5" />
                 <span>{(299 / (totals.calories || 1)).toFixed(2)}฿/k</span>
               </div>
-              <div className="text-[11px] font-black text-white leading-tight mt-0.5">
+              <div className="text-[10px] font-black text-white leading-tight mt-0.5 truncate">
                 สรุป & บันทึก
               </div>
             </button>

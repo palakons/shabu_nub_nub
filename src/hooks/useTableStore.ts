@@ -236,7 +236,13 @@ export function useTableStore() {
       }
     });
 
-    return { calories, protein, fat, carbs, totalTrays };
+    return {
+      calories: Math.round(calories),
+      protein: Math.round(protein * 10) / 10,
+      fat: Math.round(fat * 10) / 10,
+      carbs: Math.round(carbs * 10) / 10,
+      totalTrays,
+    };
   }, [orders]);
 
   const resetTable = useCallback(() => {

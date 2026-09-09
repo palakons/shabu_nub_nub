@@ -6,6 +6,7 @@ import { MealSummaryModal } from './components/MealSummaryModal';
 import { SavedSessionsModal } from './components/SavedSessionsModal';
 import { TdeeSettingsModal } from './components/TdeeSettingsModal';
 import { FeedbackModal } from './components/FeedbackModal';
+import { ThaiRdiModal } from './components/ThaiRdiModal';
 import { LegalDisclaimer } from './components/LegalDisclaimer';
 import { useTableStore } from './hooks/useTableStore';
 import { MK_MENU_ITEMS } from './data/mkMenu';
@@ -41,6 +42,7 @@ export default function App() {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [isTdeeModalOpen, setIsTdeeModalOpen] = useState(false);
+  const [isThaiRdiOpen, setIsThaiRdiOpen] = useState(false);
 
   const imageMode = userSettings.imageMode || 'official';
 
@@ -76,6 +78,10 @@ export default function App() {
         onOpenTdeeModal={() => setIsTdeeModalOpen(true)}
         onOpenHistory={() => setIsHistoryOpen(true)}
         onOpenFeedback={() => setIsFeedbackOpen(true)}
+        onOpenThaiRdi={() => {
+          trackEvent('thai_rdi_view');
+          setIsThaiRdiOpen(true);
+        }}
       />
 
       {/* Main Content Body */}
@@ -130,8 +136,6 @@ export default function App() {
         />
       </main>
 
-
-
       {/* Meal Summary Modal */}
       <MealSummaryModal
         isOpen={isSummaryOpen}
@@ -142,6 +146,13 @@ export default function App() {
         authUser={authUser}
         onSaveSession={saveDiningSession}
         authServerUrl={AUTH_SERVER_URL}
+      />
+
+      {/* Thai RDI Comparison Modal */}
+      <ThaiRdiModal
+        isOpen={isThaiRdiOpen}
+        onClose={() => setIsThaiRdiOpen(false)}
+        totals={totals}
       />
 
       {/* TDEE & Target Deficit Settings Modal */}
